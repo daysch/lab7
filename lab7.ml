@@ -291,7 +291,7 @@ Exercise 2D: Create a function called area that accepts a shape object
 and returns a float of the area for that shape.
 ....................................................................*)
 let area (s : shape) : float =
-  failwith "area not implemented" ;;
+  s#area ;;
 
 (*....................................................................
 Exercise 2E: Create a list of instantiated shapes called s_list.
@@ -301,7 +301,7 @@ The list should contain, in order:
 3. a square at (-3, -2.5) with size 4.3
 ....................................................................*)
 
-let s_list = [] ;;
+let s_list = [new rect (1., 1.) 4. 5.; new circle (0., ~-.4.) 10.; new square (~-.3., ~-.2.5) 4.3] ;;
 
 (* As you might recall, lists can only contain objects of the same
 type.  Why does the type system not show an error with your answer to
@@ -351,9 +351,10 @@ Exercise 3A: Implement the square_rect class which inherits all of its
 methods from its parent.
 ......................................................................*)
 
-(* UNCOMMENT ME AND COMPLETE
-class square_rect (p : point) (s : float) : shape = ...
- *)
+class square_rect (p : point) (s : float) : shape =
+  object (this)
+    inherit rect p s s as super
+  end
 
 (*......................................................................
 Exercise 3B: Now, implement a square_center_scale class that inherits
