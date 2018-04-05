@@ -353,7 +353,7 @@ methods from its parent.
 
 class square_rect (p : point) (s : float) : shape =
   object (this)
-    inherit rect p s s as super
+    inherit rect p s s
   end
 
 (*......................................................................
@@ -436,11 +436,14 @@ that implements a quad class type. Hint: By taking advantage of
 existing classes, you should only need to implement a single method.
 ......................................................................*)
 
-(* UNCOMMENT ME
 class rect_quad (p : point) (w : float) (h : float) : quad =
-  object
+  object (self)
+    inherit rect p w h
+    method sides =
+      let (x1, y1), (x2, y2) = self#bounding_box in
+      let h, w = (y2 -. y1, x2 -. x1) in
+      (w, h, w, h)
   end ;;
- *)
 
 (*......................................................................
 Exercise 4B: Complete a class, square_quad, that represents a square
@@ -448,11 +451,10 @@ that implements a quad class type. Hint: you shouldn't need to
 implement any methods!
 ......................................................................*)
 
-(* UNCOMMENT ME
 class square_quad (p : point) (s : float) : quad =
   object
+    inherit rect_quad p s s
   end ;;
-*)
 
 (* Remember Exercise 2D, in which you implemented an area function for
 shapes? Amazingly, even though we have continued to create new shapes,
@@ -465,19 +467,17 @@ pass it to the area function to find out its area and store the result
 in a variable "a".
 ......................................................................*)
 
-(* UNCOMMENT ME
-let sq : quad = .. ;;
+let sq : quad = new square_quad (0., 0.) 5. ;;
 
-let a = .. ;;
-*)
+let a =  area (sq :> shape);;
 
 (*......................................................................
 Exercise 4D: Write a function, area_list, that accepts a list of
 shapes and returns a list of areas.
 ......................................................................*)
 
-let area_list (lst : shape list) : float list =
-  failwith "area_list not implemented" ;;
+let area_list : shape list -> float list =
+  List.map area ;;
 
 (* This works because of *dynamic dispatch*; we decide the code to run
 at run-time instead of compile-time. In other words, the shape#area
