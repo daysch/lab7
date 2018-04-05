@@ -364,9 +364,12 @@ place. Hint: First scale, then translate the center to its original
 position.
 ......................................................................*)
 
-(* UNCOMMENT ME AND COMPLETE
-class square_center_scale (p: point) (s: float) : shape = ...
- *)
+class square_center_scale (p: point) (s: float) : shape =
+  object (this)
+    inherit square p s as super
+    method! scale k =
+      super# scale k; super# translate (k /. 2., k /. 2.)
+  end
 
 (* Before we move on, consider: do you need to make any modifications
 to the area function you wrote in Exercise 2D to support these new
